@@ -1,0 +1,35 @@
+type Network = variant {
+    Regtest;
+    Testnet;
+    Mainnet;
+};
+
+type Env = variant {
+    Prod;
+    Test;
+};
+
+type Vote = variant {
+    Pro;
+    Cons;
+};
+
+type Voting = record {
+    pro: nat64;
+    cons: nat64;
+    description: text;
+    voted: vec text;
+}
+
+service : (Network) -> {
+    "sign_in": (username: text, salt: text) -> (text);
+    "log_in": (username: text) -> (text);
+    "get_user_salt": (username: text) -> (text);
+
+    "create_vote": (auth_token: text, vote_name: text, vote_description: text) -> ();
+    "vote_at": (auth_token: text, vote_name: text, vote: Vote) -> (Voting);
+    "get_votings": () -> (vec record {
+                             text;
+                             Voting;
+                           });
+}
